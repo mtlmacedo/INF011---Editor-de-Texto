@@ -1,8 +1,5 @@
 package inf011.ui;
 
-import java.awt.BorderLayout;
-import java.awt.EventQueue;
-
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
@@ -11,22 +8,15 @@ import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.BufferedReader;
-import java.io.FileReader;
 
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
-
 import java.awt.GridBagConstraints;
-import com.jgoodies.forms.layout.FormLayout;
-import com.jgoodies.forms.layout.ColumnSpec;
-import com.jgoodies.forms.layout.RowSpec;
-
 import inf011.factorys.CppFactory;
 import inf011.factorys.JavaFactory;
 import inf011.interfaces.ILangFactory;
+import inf011.services.FileService;
 
-import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JButton;
 import javax.swing.JTextField;
 import java.awt.Insets;
@@ -40,8 +30,10 @@ public class MainFrame extends JFrame {
 	private JLabel lblAbrirArquivo;
 	private JButton btnAbrir;
 	private JButton btnBuscar;
+	private FileService fileService;
 	
-	public MainFrame() {		
+	public MainFrame() {	
+		this.fileService = new FileService();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
 		contentPane = new JPanel();
@@ -133,46 +125,24 @@ public class MainFrame extends JFrame {
 	private void btnAbrirOnClick() {
 		try {
 			String filePath = this.textField.getText();
-			
-			int i = filePath.lastIndexOf('.');
-			
-			if (i > 0) {
-				//TODO:Essa logica deve ser atribuida a uma classe de controle
-			   String extension = filePath.substring(i+1);
-			   String[] validExtensions = new JavaFactory().supportedExtensions();
-			   
-			   int count = 0;
-			   boolean isValid = false;
-			   
-			   while(count < validExtensions.length) {
-				   String temp = validExtensions[count];
-				   if( temp.equals(extension)) {
-					   isValid = true;
-					   break; 
-				   }
-				   count++;
-			   }
-			   if(isValid) {
-				   if(extension.equals("java")) {
-					   ILangFactory factory = new JavaFactory();
-					   JFrame frame = factory.createTextArea(this.textField.getText());
-					   frame.setVisible(true);
-				   }
-				   if(extension.equals("cpp")) {
-					   ILangFactory factory = new CppFactory();
-					   JFrame frame = factory.createTextArea(this.textField.getText());
-					   frame.setVisible(true);
-				   }
-			   }else {
-					throw new Exception("Não existe plugin que suporte este arquivo");
-			   }	
+			String extension = this.fileService.getExtension(filePath);
+			if(fileService.isValid(filePath)) {
+				if(extension.equals("java")) {
+					ILangFactory factory = new JavaFactory();
+					JFrame frame = factory.createTextArea(this.textField.getText());
+					frame.setVisible(true);
+				}
+				if(extension.equals("cpp")) {
+					ILangFactory factory = new CppFactory();
+					JFrame frame = factory.createTextArea(this.textField.getText());
+					frame.setVisible(true);
+				}
+				this.dispose();   	
 			}else {
-				throw new Exception("Invalid Path");
+				throw new Exception("Não existe plugin que suporte este arquivo");
 			}	
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error : " + e.getMessage());
 		}
 	}
-	
-
 }

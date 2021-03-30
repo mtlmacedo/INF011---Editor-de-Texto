@@ -1,4 +1,4 @@
-package inf011;
+package inf011.app;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
