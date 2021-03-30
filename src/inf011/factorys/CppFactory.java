@@ -1,13 +1,14 @@
-package negocio;
+package inf011.factorys;
 
 import javax.swing.JFrame;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 
-import interfaces.IBuilder;
-import interfaces.ILangFactory;
-import ui.TextEditorUi;
+import inf011.builders.CppBuilder;
+import inf011.interfaces.IBuilder;
+import inf011.interfaces.ILangFactory;
+import inf011.ui.TextEditorUi;
 
 public class CppFactory extends ILangFactory {
 

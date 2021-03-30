@@ -1,10 +1,9 @@
-package negocio;
+package inf011;
 import java.awt.EventQueue;
 
 import javax.swing.JFrame;
 
-import interfaces.ILangFactory;
-import ui.MainFrame;
+import inf011.ui.MainFrame;
 
 public class App {
 	public static void main(String[] args) throws Exception {

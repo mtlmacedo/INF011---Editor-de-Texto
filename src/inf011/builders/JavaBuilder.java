@@ -1,6 +1,6 @@
-package negocio;
+package inf011.builders;
 
-import interfaces.IBuilder;
+import inf011.interfaces.IBuilder;
 
 public class JavaBuilder implements IBuilder {
 	@Override

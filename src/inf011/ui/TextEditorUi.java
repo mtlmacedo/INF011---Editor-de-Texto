@@ -1,4 +1,4 @@
-package ui;
+package inf011.ui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -23,9 +23,9 @@ import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
-import interfaces.IBuilder;
-import interfaces.ILangFactory;
-import negocio.JavaFactory;
+import inf011.factorys.JavaFactory;
+import inf011.interfaces.IBuilder;
+import inf011.interfaces.ILangFactory;
 
 import javax.swing.JSplitPane;
 import javax.swing.JTextField;
@@ -70,16 +70,14 @@ public class TextEditorUi extends JFrame {
 
 	private void initComponents() {
 				
-		this.sp.setColumnHeaderView(menuBar);
-		
+		this.sp.setColumnHeaderView(menuBar);		
 		this.cp.setLayout(new GridLayout(1, 1, 2, 2));
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", "java", "cpp");	
 		this.fileChooser.addChoosableFileFilter(filter);
 			
-		//this.textArea.setCodeFoldingEnabled(true);
-      
-		//this.sp.getTextArea().setWrapStyleWord(false);
+		this.textArea.setCodeFoldingEnabled(true);      
+		this.sp.getTextArea().setWrapStyleWord(false);
 		this.cp.add(sp, BorderLayout.CENTER);
         		    
 		this.btnLoad.addActionListener(new ActionListener() {
@@ -114,6 +112,7 @@ public class TextEditorUi extends JFrame {
 			JOptionPane.showMessageDialog(null, e.getMessage());
 		}
 	}
+
 	private void btnLoadOnClick() {
 		try {
 			int response = this.fileChooser.showOpenDialog(this);
@@ -141,8 +140,7 @@ public class TextEditorUi extends JFrame {
 	private void loadFile() {
 		
 		try {		
-			FileReader reader = new FileReader(this.filePath);
-			this.bufferedReader = new BufferedReader(reader);
+			this.bufferedReader = new BufferedReader(new FileReader(this.filePath));
 	
 			String buffer;
 			while ((buffer = bufferedReader.readLine()) != null) {

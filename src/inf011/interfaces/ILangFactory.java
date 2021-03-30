@@ -1,11 +1,11 @@
-package interfaces;
+package inf011.interfaces;
 
 import javax.swing.JFrame;
 
 public abstract class ILangFactory {
 	
 	public ILangFactory() {
-		//TODO: Load extensions metadata
+		//TODO: Load extencions metadata
 	}
 	public String [] supportedExtensions() {
 		String[] extensions = {"cpp", "java"};

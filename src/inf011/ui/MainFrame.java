@@ -1,4 +1,4 @@
-package ui;
+package inf011.ui;
 
 import java.awt.BorderLayout;
 import java.awt.EventQueue;
@@ -22,9 +22,9 @@ import com.jgoodies.forms.layout.FormLayout;
 import com.jgoodies.forms.layout.ColumnSpec;
 import com.jgoodies.forms.layout.RowSpec;
 
-import interfaces.ILangFactory;
-import negocio.CppFactory;
-import negocio.JavaFactory;
+import inf011.factorys.CppFactory;
+import inf011.factorys.JavaFactory;
+import inf011.interfaces.ILangFactory;
 
 import com.jgoodies.forms.layout.FormSpecs;
 import javax.swing.JButton;
@@ -137,7 +137,7 @@ public class MainFrame extends JFrame {
 			int i = filePath.lastIndexOf('.');
 			
 			if (i > 0) {
-				//Essa logica deve ser atribuida a uma classe de controle
+				//TODO:Essa logica deve ser atribuida a uma classe de controle
 			   String extension = filePath.substring(i+1);
 			   String[] validExtensions = new JavaFactory().supportedExtensions();
 			   
@@ -155,12 +155,12 @@ public class MainFrame extends JFrame {
 			   if(isValid) {
 				   if(extension.equals("java")) {
 					   ILangFactory factory = new JavaFactory();
-					   JFrame frame = factory.createTextArea(this.fileChooser.getSelectedFile().getPath());
+					   JFrame frame = factory.createTextArea(this.textField.getText());
 					   frame.setVisible(true);
 				   }
 				   if(extension.equals("cpp")) {
 					   ILangFactory factory = new CppFactory();
-					   JFrame frame = factory.createTextArea(this.fileChooser.getSelectedFile().getPath());
+					   JFrame frame = factory.createTextArea(this.textField.getText());
 					   frame.setVisible(true);
 				   }
 			   }else {
