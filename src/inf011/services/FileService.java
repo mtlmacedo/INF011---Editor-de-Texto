@@ -1,22 +1,33 @@
 package inf011.services;
 
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
+
+import javax.swing.JFrame;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
+import inf011.factorys.CppFactory;
 import inf011.factorys.JavaFactory;
+import inf011.interfaces.ILangFactory;
 
 public class FileService {
 	
-	public boolean isValid(String filePath) throws Exception {				
+	private BufferedReader bufferedReader;
+	
+	public void validateExtension(String filePath) throws Exception {				
 		
 		String[] validExtensions = new JavaFactory().supportedExtensions();
-		int count = 0;
+		String fileExtension = this.getExtension(filePath);
+		
 			   
-		while(count < validExtensions.length) {
-			String temp = validExtensions[count];
-			if( temp.equals(this.getExtension(filePath))) {
-				return true;
+		for(String extencion : validExtensions) {
+			if( extencion.equals(fileExtension)) {
+				return;
 			}
-				count++;
-		}			
-		return false;
+		}
+		throw new Exception("Não existe plugin que suporte este arquivo");
 	}
 	
 	public String getExtension(String filePath) throws Exception {
@@ -26,5 +37,5 @@ public class FileService {
 		}else {
 			throw new Exception("Invalid Path");
 		}	
-	}
+	}	
 }

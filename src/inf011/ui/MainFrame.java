@@ -126,21 +126,22 @@ public class MainFrame extends JFrame {
 		try {
 			String filePath = this.textField.getText();
 			String extension = this.fileService.getExtension(filePath);
-			if(fileService.isValid(filePath)) {
-				if(extension.equals("java")) {
-					ILangFactory factory = new JavaFactory();
-					JFrame frame = factory.createTextArea(this.textField.getText());
-					frame.setVisible(true);
-				}
-				if(extension.equals("cpp")) {
-					ILangFactory factory = new CppFactory();
-					JFrame frame = factory.createTextArea(this.textField.getText());
-					frame.setVisible(true);
-				}
-				this.dispose();   	
+
+			fileService.validateExtension(filePath);
+			
+			if(extension.equals("java")) {
+				ILangFactory factory = new JavaFactory();
+				JFrame frame = factory.createTextArea(this.textField.getText());
+				frame.setVisible(true);
+			}else if(extension.equals("cpp")) {
+				ILangFactory factory = new CppFactory();
+				JFrame frame = factory.createTextArea(this.textField.getText());
+				frame.setVisible(true);
 			}else {
 				throw new Exception("Não existe plugin que suporte este arquivo");
 			}	
+			this.dispose();   	
+			
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error : " + e.getMessage());
 		}

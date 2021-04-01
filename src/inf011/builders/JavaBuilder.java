@@ -4,7 +4,7 @@ import inf011.interfaces.IBuilder;
 
 public class JavaBuilder implements IBuilder {
 	@Override
-	public void run(String filePath) {
+	public void build(String filePath) {
 		try {			
 		    Process process = Runtime.getRuntime().exec("javac " + filePath);
 		    process.waitFor();

@@ -7,21 +7,27 @@ import inf011.interfaces.IBuilder;
 public class CppBuilder implements IBuilder {
 
 	@Override
-	public void run(String filePath) {
+	public void build(String filePath) {
 		try {	
-			File file = new File(filePath);
-			
-			String name = file.getName();
-			int i = name.lastIndexOf('.');
-			String exeName = name.substring(0, i) + ".exe";
-			String path = file.getParent();
-			
-			String cmd = "g++"+ ' ' + filePath + ' ' + "-o" + ' ' + path + '\\' + exeName;
-			
+			String cmd = this.setCommand(filePath);			
 		    Process process = Runtime.getRuntime().exec(cmd);
 		    process.waitFor();
 		}catch (Exception e) {
 		    System.out.println("CPP Builder - Execution Error : " + e);
 		}		
+	}
+	//A linha de comando não é montada no FileService para manter a modularidade do builder 
+	private String setCommand(String filePath) {
+		String name = new File(filePath).getName();
+		
+		int lastBarIndex = filePath.lastIndexOf(name);			
+		String pathWithAnBar = filePath.substring(0, lastBarIndex++);
+		
+		int dotIndex = name.lastIndexOf('.');			
+		String exeName = name.substring(0, dotIndex);
+		
+		String exePath = pathWithAnBar + exeName;
+		
+		return "g++"+ ' ' + filePath + ' ' + "-o" + ' ' + exePath;
 	}
 }
