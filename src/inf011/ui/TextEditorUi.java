@@ -53,60 +53,33 @@ public class TextEditorUi extends JFrame {
 	private JMenuBar menuBar;
 	private JPanel panel;
 	
+
 	public TextEditorUi(RSyntaxTextArea textArea, String filePath, IBuilder builder) {	
 		this.fileService = new FileService();
 		this.filePath = filePath;
 		this.builder = builder;
 		this.textArea = textArea;
+		this.sp = new RTextScrollPane(textArea);
+		this.menuBar = new JMenuBar();
 		this.cp = new JPanel();
 		this.fileChooser = new JFileChooser();
+		this.btnLoad = new JButton("Load");	  
+		this.btnBuild = new JButton("Build");		
+		this.btnSave = new JButton("Save");
+		
 		initComponents();
 	}
-	private void initComponents() {
+	private void initComponents() {				
+		this.sp.setColumnHeaderView(menuBar);		
+		this.cp.setLayout(new GridLayout(1, 1, 2, 2));
 
 		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", "java", "cpp");	
 		this.fileChooser.addChoosableFileFilter(filter);
 		this.fileChooser.setFileFilter(filter);
 		
 		this.textArea.setCodeFoldingEnabled(true);      
-
-		setContentPane(cp);
-		GridBagLayout gbl_cp = new GridBagLayout();
-		gbl_cp.columnWidths = new int[]{212, 0};
-		gbl_cp.rowHeights = new int[]{58, 0, 0};
-		gbl_cp.columnWeights = new double[]{1.0, Double.MIN_VALUE};
-		gbl_cp.rowWeights = new double[]{0.0, 1.0, Double.MIN_VALUE};
-		cp.setLayout(gbl_cp);
-		
-		tabbedPane = new JTabbedPane(JTabbedPane.TOP);
-		GridBagConstraints gbc_tabbedPane = new GridBagConstraints();
-		gbc_tabbedPane.fill = GridBagConstraints.BOTH;
-		gbc_tabbedPane.insets = new Insets(0, 0, 5, 0);
-		gbc_tabbedPane.gridx = 0;
-		gbc_tabbedPane.gridy = 0;
-		cp.add(tabbedPane, gbc_tabbedPane);
-		
-		panel = new JPanel();
-		tabbedPane.addTab("New tab", null, panel, null);
-		GridBagLayout gbl_panel = new GridBagLayout();
-		gbl_panel.columnWidths = new int[]{278, 0};
-		gbl_panel.rowHeights = new int[]{32, 0, 0, 0, 0, 0, 0, 0};
-		gbl_panel.columnWeights = new double[]{0.0, Double.MIN_VALUE};
-		gbl_panel.rowWeights = new double[]{0.0, 0.0, 0.0, 0.0, 0.0, 0.0, 0.0, Double.MIN_VALUE};
-		panel.setLayout(gbl_panel);
-		
-		menuBar = new JMenuBar();
-		GridBagConstraints gbc_menuBar = new GridBagConstraints();
-		gbc_menuBar.anchor = GridBagConstraints.NORTHWEST;
-		gbc_menuBar.insets = new Insets(0, 0, 5, 0);
-		gbc_menuBar.gridx = 0;
-		gbc_menuBar.gridy = 0;
-		panel.add(menuBar, gbc_menuBar);
-		this.btnLoad = new JButton("Load");
-		menuBar.add(btnLoad);
-		this.btnBuild = new JButton("Build");
-		menuBar.add(btnBuild);
-		this.btnSave = new JButton("Save");
+		this.sp.getTextArea().setWrapStyleWord(false);
+		this.cp.add(sp, BorderLayout.CENTER);
 		menuBar.add(btnSave);
 		
 		this.btnSave.addActionListener(new ActionListener() {
@@ -115,25 +88,23 @@ public class TextEditorUi extends JFrame {
 	      	}
 		});
 		
-		this.btnBuild.addActionListener(new ActionListener() {
-		  	public void actionPerformed(ActionEvent e) {
-		  		btnBuildOnClick();
-		  	}
-		});
-		
 		this.btnLoad.addActionListener(new ActionListener() {
 	      	public void actionPerformed(ActionEvent e) {
 	      		btnLoadOnClick();
 	      	}
 		});
-		this.sp = new RTextScrollPane(textArea);
-		GridBagConstraints gbc_sp = new GridBagConstraints();
-		gbc_sp.gridheight = 6;
-		gbc_sp.anchor = GridBagConstraints.WEST;
-		gbc_sp.gridx = 0;
-		gbc_sp.gridy = 1;
-		panel.add(sp, gbc_sp);
-		this.sp.getTextArea().setWrapStyleWord(false);
+	    
+		this.btnBuild.addActionListener(new ActionListener() {
+	      	public void actionPerformed(ActionEvent e) {
+	      		btnBuildOnClick();
+	      	}
+		});
+		
+		this.menuBar.add(btnLoad);
+      
+		this.menuBar.add(btnBuild);
+
+		setContentPane(cp);
 		setTitle("Text Editor");
 		setDefaultCloseOperation(EXIT_ON_CLOSE);
 		pack();
@@ -147,6 +118,7 @@ public class TextEditorUi extends JFrame {
 			 BufferedWriter writer = new BufferedWriter(new FileWriter(this.filePath));
 			 writer.write(str);		 
 			 writer.close();
+			 JOptionPane.showMessageDialog(null, "Arquivo Salvo com Sucesso!");
 		 }catch (Exception e) {
 			 JOptionPane.showMessageDialog(null, e.getMessage());
 		}
@@ -171,6 +143,7 @@ public class TextEditorUi extends JFrame {
 				fileService.validateExtension(filePath);
 				
 				if(extension.equals("java")) {
+					Class cls = Class.forName("JavaFactory");
 					ILangFactory factory = new JavaFactory();
 					JFrame frame = factory.createTextArea(filePath);
 					frame.setVisible(true);
