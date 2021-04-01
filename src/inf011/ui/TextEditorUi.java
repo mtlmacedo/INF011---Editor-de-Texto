@@ -143,7 +143,6 @@ public class TextEditorUi extends JFrame {
 				fileService.validateExtension(filePath);
 				
 				if(extension.equals("java")) {
-					Class cls = Class.forName("JavaFactory");
 					ILangFactory factory = new JavaFactory();
 					JFrame frame = factory.createTextArea(filePath);
 					frame.setVisible(true);
