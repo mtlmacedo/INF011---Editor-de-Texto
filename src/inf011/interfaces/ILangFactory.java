@@ -2,6 +2,8 @@ package inf011.interfaces;
 
 import javax.swing.JFrame;
 
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 public abstract class ILangFactory {
 	
 	public ILangFactory() {
@@ -11,6 +13,6 @@ public abstract class ILangFactory {
 		String[] extensions = {"cpp", "java"};
 		return extensions;		
 	}
-	public abstract JFrame createTextArea(String filePath);
+	public abstract RSyntaxTextArea createTextArea(String filePath);
 	public abstract IBuilder createBuilder();
 }

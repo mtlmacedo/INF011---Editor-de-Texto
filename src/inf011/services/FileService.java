@@ -8,8 +8,8 @@ import javax.swing.JFrame;
 
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
 
-import inf011.factorys.CppFactory;
-import inf011.factorys.JavaFactory;
+import inf011.plugin.factorys.CppFactory;
+import inf011.plugin.factorys.JavaFactory;
 import inf011.interfaces.ILangFactory;
 
 public class FileService {

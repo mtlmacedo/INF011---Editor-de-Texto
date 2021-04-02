@@ -1,4 +1,4 @@
-package inf011.builders;
+package inf011.plugin.builders;
 
 import inf011.interfaces.IBuilder;
 

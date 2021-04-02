@@ -5,6 +5,9 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
 import javax.swing.filechooser.FileNameExtensionFilter;
+
+import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+
 import java.awt.GridBagLayout;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
@@ -12,8 +15,8 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.GridBagConstraints;
-import inf011.factorys.CppFactory;
-import inf011.factorys.JavaFactory;
+import inf011.plugin.factorys.CppFactory;
+import inf011.plugin.factorys.JavaFactory;
 import inf011.interfaces.ILangFactory;
 import inf011.services.FileService;
 import inf011.services.PluginService;
@@ -32,8 +35,10 @@ public class MainFrame extends JFrame {
 	private JButton btnAbrir;
 	private JButton btnBuscar;
 	private FileService fileService;
+	private PluginService pluginService;
 	
-	public MainFrame() {	
+	public MainFrame(PluginService pluginService) {	
+		this.pluginService = pluginService;
 		this.fileService = new FileService();
 		setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		setBounds(100, 100, 450, 300);
@@ -127,17 +132,10 @@ public class MainFrame extends JFrame {
 		try {
 			String filePath = this.textField.getText();
 			String extension = this.fileService.getExtension(filePath);
-
-			fileService.validateExtension(filePath);
-			
-			fileService.validateExtension(filePath);
-			PluginService pluginService = new PluginService();
-			ILangFactory factory = pluginService.loadFactoryByExtension(extension); ;
-			JFrame frame = factory.createTextArea(filePath);
-			frame.setVisible(true);
-			
-			this.dispose();   	
-			
+			ILangFactory factory = pluginService.getFactoryByExtension(extension);
+			RSyntaxTextArea textArea = factory.createTextArea(filePath);
+			 JFrame frame = new TextEditorUi(textArea, filePath, factory.createBuilder(), this.pluginService);
+			frame.setVisible(true); 				
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, "Error : " + e.getMessage());
 		}

@@ -16,7 +16,9 @@ import inf011.interfaces.ILangFactory;
 
 public class PluginService {
 	
-	public ILangFactory loadFactoryByExtension(String extension) throws SAXException, IOException, ParserConfigurationException, ClassNotFoundException, InstantiationException, IllegalAccessException {
+	private final String factorysPath = "inf011.plugin.factorys.";
+	
+	public ILangFactory getFactoryByExtension(String extension) throws Exception {
 		 DocumentBuilderFactory dbFactory = DocumentBuilderFactory.newInstance();
 	     DocumentBuilder builder = dbFactory.newDocumentBuilder();
 	     Document document = builder.parse("data/Plugins.xml");
@@ -29,15 +31,14 @@ public class PluginService {
 			if (node.getNodeType() == Node.ELEMENT_NODE)   
 			{  
 				Element eElement = (Element) node; 
-				if(extension.equals(eElement.getElementsByTagName("extension").item(0).getTextContent())){
-					
-					 Class<?> factoryClass = Class.forName("inf011.factorys." + eElement.getElementsByTagName("factoryName").item(0).getTextContent());
+				if(extension.equals(eElement.getElementsByTagName("extension").item(0).getTextContent())){					
+					 Class<?> factoryClass = Class.forName(factorysPath + eElement.getElementsByTagName("factoryName").item(0).getTextContent());
 				     ILangFactory factory = (ILangFactory)factoryClass.newInstance();
 				     return factory;
 				}
 				
 			}
 		}
-		return null;	     
+		throw new Exception("");
 	}
 }

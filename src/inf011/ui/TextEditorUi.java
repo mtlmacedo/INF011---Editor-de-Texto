@@ -9,7 +9,6 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
-import java.lang.reflect.Constructor;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -17,11 +16,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
-import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
-
-import inf011.factorys.CppFactory;
-import inf011.factorys.JavaFactory;
 import inf011.interfaces.IBuilder;
 import inf011.interfaces.ILangFactory;
 import inf011.services.FileService;
@@ -29,13 +24,6 @@ import inf011.services.PluginService;
 
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
-import javax.swing.JTabbedPane;
-import java.awt.GridBagLayout;
-import java.awt.GridBagConstraints;
-import java.awt.Insets;
-import javax.swing.BoxLayout;
-import java.awt.CardLayout;
-import javax.swing.JLabel;
 
 public class TextEditorUi extends JFrame {
 
@@ -52,17 +40,16 @@ public class TextEditorUi extends JFrame {
 	private String filePath;
 	private IBuilder builder;
 	private FileService fileService;
-	private JTabbedPane tabbedPane;
 	private JMenuBar menuBar;
-	private JPanel panel;
-	
+	private PluginService pluginService;
 
-	public TextEditorUi(String syntax, String filePath, IBuilder builder) {	
+	public TextEditorUi(RSyntaxTextArea textArea, String filePath, IBuilder builder,  PluginService pluginService) {	
+		this.pluginService = pluginService;
 		this.fileService = new FileService();
 		this.filePath = filePath;
 		this.builder = builder;
 		this.textArea = new RSyntaxTextArea();
-		this.textArea.setSyntaxEditingStyle(syntax);
+		this.textArea = textArea;
 		this.sp = new RTextScrollPane(textArea);
 		this.menuBar = new JMenuBar();
 		this.cp = new JPanel();
@@ -108,10 +95,10 @@ public class TextEditorUi extends JFrame {
 		this.menuBar.add(btnLoad);
       
 		this.menuBar.add(btnBuild);
-
+		
 		setContentPane(cp);
-		setTitle("Text Editor");
-		setDefaultCloseOperation(EXIT_ON_CLOSE);
+		setTitle(new File(filePath).getName());
+		setDefaultCloseOperation(DISPOSE_ON_CLOSE);
 		pack();
 		setLocationRelativeTo(null);
 		this.loadFile();
@@ -144,15 +131,13 @@ public class TextEditorUi extends JFrame {
 				
 				String filePath = this.fileChooser.getSelectedFile().getPath();
 				String extension = this.fileService.getExtension(filePath);
-				
-				fileService.validateExtension(filePath);
-				PluginService pluginService = new PluginService();
-				ILangFactory factory = pluginService.loadFactoryByExtension(extension); ;
-				JFrame frame = factory.createTextArea(filePath);
+				ILangFactory factory = this.pluginService.getFactoryByExtension(extension); 
+				RSyntaxTextArea textArea = factory.createTextArea(filePath);
+				JFrame frame = new TextEditorUi(textArea, filePath, factory.createBuilder(), this.pluginService);
 				frame.setVisible(true);
 				
 			}else {
-				throw new Exception("NO FILE CHOOSEN!");
+				throw new Exception("Nenhum arquivo foi carregado!");
 			}
 		}catch (Exception e) {
 			JOptionPane.showMessageDialog(null, e.getMessage());
