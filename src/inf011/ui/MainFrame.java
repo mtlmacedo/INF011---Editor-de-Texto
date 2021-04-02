@@ -15,8 +15,6 @@ import java.awt.event.ActionListener;
 import javax.swing.JLabel;
 import javax.swing.JOptionPane;
 import java.awt.GridBagConstraints;
-import inf011.plugin.factorys.CppFactory;
-import inf011.plugin.factorys.JavaFactory;
 import inf011.interfaces.ILangFactory;
 import inf011.services.FileService;
 import inf011.services.PluginService;
@@ -56,7 +54,7 @@ public class MainFrame extends JFrame {
 	}
 	private void initComponents() {
 		
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", "java", "cpp");	
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", this.pluginService.getValidExtension());	
 		this.fileChooser.addChoosableFileFilter(filter);
 		this.fileChooser.setFileFilter(filter);
 		

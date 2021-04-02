@@ -16,7 +16,6 @@ public class CppBuilder implements IBuilder {
 		    System.out.println("CPP Builder - Execution Error : " + e);
 		}		
 	}
-	//A linha de comando não é montada no FileService para manter a modularidade do builder 
 	private String setCommand(String filePath) {
 		String name = new File(filePath).getName();
 		

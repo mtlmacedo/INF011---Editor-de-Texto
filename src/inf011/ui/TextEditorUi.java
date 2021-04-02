@@ -64,8 +64,8 @@ public class TextEditorUi extends JFrame {
 		
 		this.sp.setColumnHeaderView(menuBar);		
 		this.cp.setLayout(new GridLayout(1, 1, 2, 2));
-
-		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", "java", "cpp");	
+		
+		FileNameExtensionFilter filter = new FileNameExtensionFilter("CodeFiles", this.pluginService.getValidExtension());	
 		this.fileChooser.addChoosableFileFilter(filter);
 		this.fileChooser.setFileFilter(filter);
 		
