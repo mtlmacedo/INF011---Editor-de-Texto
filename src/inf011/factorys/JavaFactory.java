@@ -14,9 +14,7 @@ public class JavaFactory extends ILangFactory {
 
 	@Override
 	public JFrame createTextArea(String filePath) {
-		RSyntaxTextArea textArea = new RSyntaxTextArea(40, 120);
-		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_JAVA);
-		return new TextEditorUi(textArea, filePath, this.createBuilder());
+		return new TextEditorUi(SyntaxConstants.SYNTAX_STYLE_JAVA, filePath, this.createBuilder());
 	}
 
 	@Override

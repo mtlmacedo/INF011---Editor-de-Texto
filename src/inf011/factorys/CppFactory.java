@@ -14,9 +14,7 @@ public class CppFactory extends ILangFactory {
 
 	@Override
 	public JFrame createTextArea(String filePath) {
-		RSyntaxTextArea textArea = new RSyntaxTextArea(40, 120);
-		textArea.setSyntaxEditingStyle(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS);
-		return new TextEditorUi(textArea, filePath, this.createBuilder());
+		return new TextEditorUi(SyntaxConstants.SYNTAX_STYLE_CPLUSPLUS, filePath, this.createBuilder());
 	}
 
 	@Override

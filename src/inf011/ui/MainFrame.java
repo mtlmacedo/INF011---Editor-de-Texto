@@ -16,6 +16,7 @@ import inf011.factorys.CppFactory;
 import inf011.factorys.JavaFactory;
 import inf011.interfaces.ILangFactory;
 import inf011.services.FileService;
+import inf011.services.PluginService;
 
 import javax.swing.JButton;
 import javax.swing.JTextField;
@@ -129,17 +130,12 @@ public class MainFrame extends JFrame {
 
 			fileService.validateExtension(filePath);
 			
-			if(extension.equals("java")) {
-				ILangFactory factory = new JavaFactory();
-				JFrame frame = factory.createTextArea(this.textField.getText());
-				frame.setVisible(true);
-			}else if(extension.equals("cpp")) {
-				ILangFactory factory = new CppFactory();
-				JFrame frame = factory.createTextArea(this.textField.getText());
-				frame.setVisible(true);
-			}else {
-				throw new Exception("Não existe plugin que suporte este arquivo");
-			}	
+			fileService.validateExtension(filePath);
+			PluginService pluginService = new PluginService();
+			ILangFactory factory = pluginService.loadFactoryByExtension(extension); ;
+			JFrame frame = factory.createTextArea(filePath);
+			frame.setVisible(true);
+			
 			this.dispose();   	
 			
 		}catch (Exception e) {

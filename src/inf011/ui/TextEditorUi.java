@@ -9,6 +9,7 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileReader;
 import java.io.FileWriter;
+import java.lang.reflect.Constructor;
 
 import javax.swing.JButton;
 import javax.swing.JFileChooser;
@@ -16,6 +17,7 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import org.fife.ui.rsyntaxtextarea.RSyntaxTextArea;
+import org.fife.ui.rsyntaxtextarea.SyntaxConstants;
 import org.fife.ui.rtextarea.RTextScrollPane;
 
 import inf011.factorys.CppFactory;
@@ -23,6 +25,7 @@ import inf011.factorys.JavaFactory;
 import inf011.interfaces.IBuilder;
 import inf011.interfaces.ILangFactory;
 import inf011.services.FileService;
+import inf011.services.PluginService;
 
 import javax.swing.JMenuBar;
 import javax.swing.JOptionPane;
@@ -54,11 +57,12 @@ public class TextEditorUi extends JFrame {
 	private JPanel panel;
 	
 
-	public TextEditorUi(RSyntaxTextArea textArea, String filePath, IBuilder builder) {	
+	public TextEditorUi(String syntax, String filePath, IBuilder builder) {	
 		this.fileService = new FileService();
 		this.filePath = filePath;
 		this.builder = builder;
-		this.textArea = textArea;
+		this.textArea = new RSyntaxTextArea();
+		this.textArea.setSyntaxEditingStyle(syntax);
 		this.sp = new RTextScrollPane(textArea);
 		this.menuBar = new JMenuBar();
 		this.cp = new JPanel();
@@ -69,7 +73,8 @@ public class TextEditorUi extends JFrame {
 		
 		initComponents();
 	}
-	private void initComponents() {				
+	private void initComponents() {	
+		
 		this.sp.setColumnHeaderView(menuBar);		
 		this.cp.setLayout(new GridLayout(1, 1, 2, 2));
 
@@ -141,17 +146,11 @@ public class TextEditorUi extends JFrame {
 				String extension = this.fileService.getExtension(filePath);
 				
 				fileService.validateExtension(filePath);
+				PluginService pluginService = new PluginService();
+				ILangFactory factory = pluginService.loadFactoryByExtension(extension); ;
+				JFrame frame = factory.createTextArea(filePath);
+				frame.setVisible(true);
 				
-				if(extension.equals("java")) {
-					ILangFactory factory = new JavaFactory();
-					JFrame frame = factory.createTextArea(filePath);
-					frame.setVisible(true);
-				}
-				if(extension.equals("cpp")) {
-					ILangFactory factory = new CppFactory();
-					JFrame frame = factory.createTextArea(filePath);
-					frame.setVisible(true);
-				}
 			}else {
 				throw new Exception("NO FILE CHOOSEN!");
 			}

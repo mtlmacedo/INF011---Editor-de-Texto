@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<plugins>
+	<plugin>
+		<factoryName>JavaFactory</factoryName>
+		<extension>java</extension>
+	</plugin>
+	<plugin>
+		<factoryName>CppFactory</factoryName>
+		<extension>cpp</extension>
+	</plugin>
+</plugins>
