@@ -131,7 +131,7 @@ public class MainFrame extends JFrame {
 			String filePath = this.textField.getText();
 			String extension = this.fileService.getExtension(filePath);
 			ILangFactory factory = pluginService.getFactoryByExtension(extension);
-			RSyntaxTextArea textArea = factory.createTextArea(filePath);
+			RSyntaxTextArea textArea = (RSyntaxTextArea) factory.createTextArea(filePath);
 			 JFrame frame = new TextEditorUi(textArea, filePath, factory.createBuilder(), this.pluginService);
 			frame.setVisible(true); 				
 		}catch (Exception e) {

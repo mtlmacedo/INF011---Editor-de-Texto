@@ -132,7 +132,7 @@ public class TextEditorUi extends JFrame {
 				String filePath = this.fileChooser.getSelectedFile().getPath();
 				String extension = this.fileService.getExtension(filePath);
 				ILangFactory factory = this.pluginService.getFactoryByExtension(extension); 
-				RSyntaxTextArea textArea = factory.createTextArea(filePath);
+				RSyntaxTextArea textArea = (RSyntaxTextArea) factory.createTextArea(filePath);
 				JFrame frame = new TextEditorUi(textArea, filePath, factory.createBuilder(), this.pluginService);
 				frame.setVisible(true);
 				
