@@ -1,5 +1,7 @@
 package inf011.services;
+import java.lang.reflect.Method;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -53,8 +55,18 @@ public class PluginService {
 	    if(factoryName == null || factoryName.isEmpty()) {  		    
 			throw new Exception("Não existe plugin que suporte este arquivo");
 	    }else {
-			 Class<?> factoryClass = Class.forName(this.factorysPath + factoryName);
-		     ILangFactory factory = (ILangFactory)factoryClass.newInstance();
+	    	
+	    	Class<?> factoryClass = Class.forName(this.factorysPath + factoryName);
+	    	
+	    	List<Method> methods = Arrays.asList(factoryClass.getDeclaredMethods());
+	    	Method getInstanceMethod = methods.stream()
+	    			  .filter(method -> method.getName().equals("getInstance"))
+	    			  .findAny()
+	    			  .orElse(null);
+	    	
+	    	
+			 
+		     ILangFactory factory =  (ILangFactory) getInstanceMethod.invoke(null); //(ILangFactory)factoryClass.newInstance();
 		     return factory;
 	    }
 	}
